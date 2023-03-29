@@ -9,9 +9,12 @@ const createProduct = catchAsyncError(async (req, res) => {
 });
 
 const getallProducts = catchAsyncError(async (req, res) => {
-  const apifeature = new ApiFeatures(Product.find(), req.query).search();
-  // const products = await Product.find({});
-  const products = await apifeature;
+  const apifeature = new ApiFeatures(Product, req.query).search();
+  // const products = await Product.find();
+
+  const apiFeature = new ApiFeatures(Product.find(), req.query).search();
+  let products = await apiFeature.query;
+
   res.status(200).json({ success: true, products });
 });
 

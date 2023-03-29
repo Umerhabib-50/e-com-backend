@@ -5,8 +5,22 @@ class ApiFeatures {
   }
 
   search() {
-    this.query = this.query.find({});
-    console.log(this.query);
+    console.log("from here api features class", this.query);
+    const keyword = this.queryStr.keyword
+      ? {
+          name: {
+            $regex: this.queryStr.keyword,
+            $options: "i",
+          },
+        }
+      : {};
+
+    this.query = this.query.find({ ...keyword });
+    return this;
+    // this.query = this.query.find({});
+    // console.log(this.query);
+    // this.query = this.query.find({});
+    // return this.query;
   }
 }
 
