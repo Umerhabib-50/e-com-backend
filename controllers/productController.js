@@ -9,10 +9,14 @@ const createProduct = catchAsyncError(async (req, res) => {
 });
 
 const getallProducts = catchAsyncError(async (req, res) => {
-  const apifeature = new ApiFeatures(Product, req.query).search();
+  // const apifeature = new ApiFeatures(Product, req.query).search();
   // const products = await Product.find();
 
-  const apiFeature = new ApiFeatures(Product.find(), req.query).search();
+  const resultPerpage = 5;
+  const apiFeature = new ApiFeatures(Product, req.query)
+    .search()
+    .filter()
+    .pagination(resultPerpage);
   let products = await apiFeature.query;
 
   res.status(200).json({ success: true, products });
