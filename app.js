@@ -2,12 +2,13 @@ const express = require("express");
 const product = require("./routes/productRoutes");
 const user = require("./routes/userRoutes");
 const errorMiddleware = require("./middleware/error");
-
+const cookieParser = require("cookie-parser");
 // Config
 require("dotenv").config({ path: "config.env" });
 
 const app = express();
 app.use(express.json());
+app.use(cookieParser());
 
 app.use("/api/v1", product);
 app.use("/api/v1", user);
