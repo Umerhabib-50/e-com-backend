@@ -16,7 +16,6 @@ const isAuthenticated = catchAsyncError(async (req, res, next) => {
 });
 
 const isAutherized = (...roles) => {
-  console.log(roles);
   return (req, res, next) => {
     if (!roles.includes(req.user.role)) {
       return next(
