@@ -5,13 +5,32 @@ const {
   updateProduct,
   deleleProduct,
   singleProduct,
+  createProductReview,
 } = require("../controllers/productController");
 const { isAuthenticated, isAutherized } = require("../middleware/auth");
 const router = express.Router();
 
-router.get("/products", isAuthenticated, isAutherized("user"), getallProducts);
-router.post("/new", isAuthenticated, createProduct);
-router.put("/product/:id", isAuthenticated, updateProduct);
-router.delete("/product/:id", isAuthenticated, deleleProduct);
+router.get("/products", getallProducts);
+router.post(
+  "/admin/new",
+  isAuthenticated,
+  isAutherized("admin"),
+  createProduct
+);
+router.put(
+  "/admin/product/:id",
+  isAuthenticated,
+  isAutherized("admin"),
+  updateProduct
+);
+router.delete(
+  "/admin/product/:id",
+  isAuthenticated,
+  isAutherized("admin"),
+  deleleProduct
+);
 router.get("/product/:id", singleProduct);
+
+router.put("/product/review", isAuthenticated, createProductReview);
+
 module.exports = router;
