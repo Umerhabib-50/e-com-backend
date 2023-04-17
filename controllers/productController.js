@@ -13,15 +13,16 @@ const createProduct = catchAsyncError(async (req, res) => {
 
 //============================ get all products
 
-const getallProducts = catchAsyncError(async (req, res) => {
+const getallProducts = catchAsyncError(async (req, res, next) => {
   const resultPerpage = 5;
+  const productsCount = await Product.countDocuments();
   const apiFeature = new ApiFeatures(Product, req.query)
     .search()
     .filter()
     .pagination(resultPerpage);
   let products = await apiFeature.query;
 
-  res.status(200).json({ success: true, products });
+  res.status(200).json({ success: true, products, productsCount });
 });
 
 //================================= update product
