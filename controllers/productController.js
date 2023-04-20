@@ -14,16 +14,22 @@ const createProduct = catchAsyncError(async (req, res) => {
 //============================ get all products
 
 const getallProducts = catchAsyncError(async (req, res, next) => {
-  // return next(new ErrorHandler("product not found", 404));
-
   const resultPerPage = 3;
   const productsCount = await Product.countDocuments();
 
-  const apiFeature = new ApiFeatures(Product, req.query).search().filter();
+  const apiFeature = new ApiFeatures(Product.find(), req.query)
+    .search()
+    .filter();
 
-  let products = await apiFeature.query;
+  const pagination = new ApiFeatures(Product.find(), req.query)
+    .search()
+    .filter()
+    .pagination(resultPerPage);
 
-  let filteredProductsCount = products.length;
+  let filteredProductsCount = await apiFeature.query;
+  filteredProductsCount = filteredProductsCount.length;
+
+  let products = await pagination.query;
 
   res.status(200).json({
     success: true,
@@ -32,6 +38,23 @@ const getallProducts = catchAsyncError(async (req, res, next) => {
     resultPerPage,
     filteredProductsCount,
   });
+
+  // const resultPerPage = 3;
+  // const productsCount = await Product.countDocuments();
+
+  // let products = await Product.find({
+  //   // name: {
+  //   //   $regex: req.query.keyword,
+  //   //   $options: "i",
+  //   // },
+
+  //   price: { $lte: "2100", $gte: "1000" },
+  // });
+
+  // res.status(200).json({
+  //   success: true,
+  //   products,
+  // });
 });
 
 //================================= update product
