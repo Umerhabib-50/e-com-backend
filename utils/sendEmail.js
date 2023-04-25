@@ -19,8 +19,8 @@ const sendEmail = async (options) => {
   // hqhsdnulnlylybfe
   const mailOptions = {
     from: process.env.SMPT_MAIL,
-    // to: options.email,
-    to: "umr.habib@gmail.com",
+    to: options.email,
+    // to: "umr.habib@gmail.com",
     subject: options.subject,
     text: options.message,
   };
