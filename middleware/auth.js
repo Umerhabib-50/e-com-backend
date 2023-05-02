@@ -1,25 +1,27 @@
+const ErrorHander = require("../utils/errorhander");
+const catchAsyncErrors = require("./catchAsyncErrors");
 const jwt = require("jsonwebtoken");
-const User = require("../Models/userModel");
-const ErrorHandler = require("../utils/errorHandler");
-const catchAsyncError = require("./catchAsyncError");
+const User = require("../models/userModel");
 
-const isAuthenticated = catchAsyncError(async (req, res, next) => {
+exports.isAuthenticatedUser = catchAsyncErrors(async (req, res, next) => {
   const { token } = req.cookies;
 
   if (!token) {
-    return next(new ErrorHandler("Please Login to access this resourse", 401));
+    return next(new ErrorHander("Please Login to access this resource", 401));
   }
-  const decodetoken = jwt.verify(token, process.env.JWT_SECRET);
-  req.user = await User.findById(decodetoken.id);
+
+  const decodedData = jwt.verify(token, process.env.JWT_SECRET);
+
+  req.user = await User.findById(decodedData.id);
 
   next();
 });
 
-const isAutherized = (...roles) => {
+exports.authorizeRoles = (...roles) => {
   return (req, res, next) => {
     if (!roles.includes(req.user.role)) {
       return next(
-        new ErrorHandler(
+        new ErrorHander(
           `Role: ${req.user.role} is not allowed to access this resouce `,
           403
         )
@@ -29,5 +31,3 @@ const isAutherized = (...roles) => {
     next();
   };
 };
-
-module.exports = { isAuthenticated, isAutherized };
